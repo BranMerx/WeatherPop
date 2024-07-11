@@ -8,6 +8,13 @@ body {
     margin: 0;
 }
 
+#logo{
+    display: bock;
+    margin: 0 auto;
+    width: 150px;
+    height: 150px;
+}
+
 #app{
     background: white;
     padding: 20px;
