@@ -1,4 +1,4 @@
-document.getElementById('getWeather').addEventListener('click', function(){
+document.getElementById('getWeather').addEventListener('click', function(){  //Event listener when Get Weather button is pushed
     const city = document.getElementById('city').value;
     const state = document.getElementById('state').value;
     const apiKey = 'b2af4ce301674059b88135b7ea8aa42a';
@@ -25,7 +25,15 @@ document.getElementById('getWeather').addEventListener('click', function(){
     });
 });
 
-function fetchWeather(lat, lng){
+document.getElementById('getForecast').addEventListener('click', function(){ //Event listener when Get Forecast button is pushed
+    const city = document.getElementById('city').value;
+    const state = document.getElementById('state').value;
+    const apiKey = 'b2af4ce301674059b88135b7ea8aa42a';
+    const geocodeUrl =`https://api.opencagedata.com/geocode/v1/json?q=${city},${state}&key=${apiKey}`;
+
+});
+
+function fetchWeather(lat, lng){ //Function to return value for get current weather for the given city and state.
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m`;
     fetch(weatherUrl)
         .then(response => {
@@ -46,5 +54,9 @@ function fetchWeather(lat, lng){
             console.error('Error fetching weather data:', error);
             document.getElementById('weather').innerHTML = 'Error fetching weather data. Please try again.';
         }); 
+}
+
+function fetchForecast(lat,long){ //Function to return the forecast for the given city and state.
+
 }
 
