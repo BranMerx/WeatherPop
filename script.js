@@ -14,7 +14,7 @@ document.getElementById('getWeather').addEventListener('click', function(){  //E
     .then(data => {
         if (data.results.length > 0) {
             const { lat, lng } = data.results[0].geometry;
-            return fetchWeather(lat, lng);
+            fetchWeather(lat, lng);
         } else {
             throw new Error('Location not found');
         }
@@ -31,6 +31,25 @@ document.getElementById('getForecast').addEventListener('click', function(){ //E
     const apiKey = 'b2af4ce301674059b88135b7ea8aa42a';
     const geocodeUrl =`https://api.opencagedata.com/geocode/v1/json?q=${city},${state}&key=${apiKey}`;
 
+    fetch(geocodeUrl)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.results.length > 0) {
+            const { lat, lng } = data.results[0].geometry;
+            fetchForecast(lat, lng);
+        } else {
+            throw new Error('Location not found');
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching geocoding data:', error);
+        document.getElementById('forecast').innerHTML = 'Error fetching location data. Please try again.';
+    });
 });
 
 function fetchWeather(lat, lng){ //Function to return value for get current weather for the given city and state.
@@ -57,6 +76,28 @@ function fetchWeather(lat, lng){ //Function to return value for get current weat
 }
 
 function fetchForecast(lat,long){ //Function to return the forecast for the given city and state.
-
+    const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m`;
+    fetch(forecastUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const forecastDiv = document.getElementById('forecast');
+            let forecastHTML = '<h2>Weekly Forecast</h2>';
+            data.daily.temperature_2m_max.forEach((maxTemp, index) => {
+                const minTemp = data.daily.temperature_2m_min[index];
+                forecastHTML += `
+                    <p>Day ${index + 1}: Max: ${maxTemp} °C, Min: ${minTemp} °C</p>
+                `;
+            });
+            forecastDiv.innerHTML = forecastHTML;
+        })
+        .catch(error => {
+            console.error('Error fetching forecast data:', error);
+            document.getElementById('forecast').innerHTML = 'Error fetching forecast data. Please try again.';
+        });
 }
 
