@@ -54,6 +54,12 @@ document.getElementById('getForecast').addEventListener('click', function(){ // 
     });
 });
 
+document.getElementById('unitsMeasure').addEventListener('click', function(){
+    isCelsius = !isCelsius;
+    updateWeatherDisplay();
+    updateForecastDisplay();
+});
+
 function fetchWeather(lat, lng) { // Function to return value for get current weather for the given city and state.
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`;
     fetch(weatherUrl)
