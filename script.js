@@ -114,3 +114,18 @@ function updateWeatherDisplay(){
     `;
 }
 
+function updateForecastDisplay(){
+    const forecastDiv = document.getElementById('forecast');
+    const forecast = JSON.parse(forecastDiv.dataset.forecast || '[]');
+    let forecastHTML = '<h2>Weekly Forecast</h2>';
+    forecast.forEach((day,index) => {
+        const maxTemp = isCelsius ? day.maxTemp : (day.maxTemp * 9/5) + 32;
+        const minTemp = isCelsius ? day.minTemp : (day.minTemp * 9/5) + 32;
+        const unit = isCelsius ? '°C' : '°F';
+        forecastHTML +=`
+            <p>Day ${index + 1}: Max: ${maxTemp.toFixed(2)} ${unit}, Min: ${minTemp.toFixed(2)} ${unit}</p>
+
+        `;
+    });
+    forecastDiv.innerHTML = forecastHTML;
+}
