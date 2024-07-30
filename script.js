@@ -1,3 +1,5 @@
+let isCelsius = true;
+
 document.getElementById('getWeather').addEventListener('click', function(){  // Event listener when Get Weather button is pushed
     const city = document.getElementById('city').value;
     const state = document.getElementById('state').value;
@@ -100,3 +102,15 @@ function fetchForecast(lat, lng) { // Function to return the forecast for the gi
             document.getElementById('forecast').innerHTML = 'Error fetching forecast data. Please try again.';
         });
 }
+
+function updateWeatherDisplay(){
+    const weatherDiv = document.getElementById('weather');
+    const temperature = parseFloat(weatherDiv.dataset.temperature);
+    const displayTemp = isCelsius ? temperature : (temperature * 9/5) + 32;
+    const unit = isCelsius ? '°C' : '°F';
+    weatherDiv.innerHTML =`
+        <h2>Current Weather</h2>
+        <p>Temperature: ${displayTemp.toFixed(2)} ${unit}</p>
+    `;
+}
+
