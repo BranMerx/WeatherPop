@@ -1,4 +1,30 @@
 let isCelsius = true;
+let isEnglish = true;
+
+const translations = {
+    en: {
+        city: "City:",
+        state: "State:",
+        getWeater: "Get Weather",
+        getForecast: "Get Forecast",
+        unitsMeasure: "Change Units of Measurement",
+        language: "EN/ES",
+        currentWeather: "Current Weather",
+        getForecast:"Weekly Forecast"
+    },
+    es: {
+        city: "Ciudad:",
+        state: "Estado:",
+        getWeather: "Obtener el clima",
+        getForecast: "Obtener el pronóstico",
+        unitsMeasure: "Cambiar unidades",
+        language:"EN/ES",
+        currentWeather: "Clima actual",
+        getForecast:"Pronóstico semenal"
+    }
+
+};
+
 
 document.getElementById('getWeather').addEventListener('click', function(){  // Event listener when Get Weather button is pushed
     const city = document.getElementById('city').value;
@@ -60,6 +86,13 @@ document.getElementById('unitsMeasure').addEventListener('click', function(){
     updateForecastDisplay();
 });
 
+document.getElementById('language').addEventListener('click',function(){
+    isEnglish = !isEnglish;
+    updatePageLanguage();
+    updateWeatherDisplay();
+    updateForecastDisplay();
+});
+
 function fetchWeather(lat, lng) { // Function to return value for get current weather for the given city and state.
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`;
     fetch(weatherUrl)
@@ -114,24 +147,33 @@ function updateWeatherDisplay(){
     const temperature = parseFloat(weatherDiv.dataset.temperature);
     const displayTemp = isCelsius ? temperature : (temperature * 9/5) + 32;
     const unit = isCelsius ? '°C' : '°F';
-    weatherDiv.innerHTML =`
-        <h2>Current Weather</h2>
-        <p>Temperature: ${displayTemp.toFixed(2)} ${unit}</p>
+    weatherDiv.innerHTML = `
+        <h2>${translations[lang].currentWeather}</h2>
+        <p>${translations[lang].temperature}: ${displayTemp.toFixed(2)} ${unit}</p>
     `;
 }
 
 function updateForecastDisplay(){
     const forecastDiv = document.getElementById('forecast');
     const forecast = JSON.parse(forecastDiv.dataset.forecast || '[]');
-    let forecastHTML = '<h2>Weekly Forecast</h2>';
+    let forecastHTML = `<h2>${translations[lang].weeklyForecast}</h2>`;
     forecast.forEach((day,index) => {
         const maxTemp = isCelsius ? day.maxTemp : (day.maxTemp * 9/5) + 32;
         const minTemp = isCelsius ? day.minTemp : (day.minTemp * 9/5) + 32;
         const unit = isCelsius ? '°C' : '°F';
-        forecastHTML +=`
-            <p>Day ${index + 1}: Max: ${maxTemp.toFixed(2)} ${unit}, Min: ${minTemp.toFixed(2)} ${unit}</p>
-
+        forecastHTML += `
+        <p>${translations[lang].temperature} Day ${index + 1}: Max: ${displayMaxTemp.toFixed(2)} ${unit}, Min: ${displayMinTemp.toFixed(2)} ${unit}</p>
         `;
     });
     forecastDiv.innerHTML = forecastHTML;
+}
+
+function updatePageLanguage() {
+    const lang = isEnglish ? 'en' : 'es';
+    document.getElementById('cityLabel').textContent = translations[lang].city;
+    document.getElementById('stateLabel').textContent = translations[lang].state;
+    document.getElementById('getWeather').textContent = translations[lang].getWeather;
+    document.getElementById('getForecast').textContent = translations[lang].getForecast;
+    document.getElementById('toggleUnits').textContent = translations[lang].toggleUnits;
+    document.getElementById('translatePage').textContent = translations[lang].translatePage;
 }
