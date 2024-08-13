@@ -96,45 +96,31 @@ document.getElementById('language').addEventListener('click',function(){
 function fetchWeather(lat, lng) { // Function to return value for get current weather for the given city and state.
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`;
     fetch(weatherUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            const weatherDiv = document.getElementById('weather');
-            const currentWeather = data.current_weather.temperature;
-            weatherDiv.innerHTML = `
-                <h2>Current Weather</h2>
-                <p>Temperature: ${currentWeather} °C</p>
-            `;
-        })
-        .catch(error => {
-            console.error('Error fetching weather data:', error);
-            document.getElementById('weather').innerHTML = 'Error fetching weather data. Please try again.';
-        });
+    fetch(weatherUrl)
+    .then(response => response.json())
+    .then(data => {
+        const weatherDiv = document.getElementById('weather');
+        const currentWeather = data.current_weather.temperature;
+        weatherDiv.dataset.temperature = currentWeather;
+        updateWeatherDisplay();
+    })
+    .catch(error => {
+        console.error('Error fetching weather data:', error);
+        document.getElementById('weather').innerHTML = 'Error fetching weather data. Please try again.';
+    });
 }
 
 function fetchForecast(lat, lng) { // Function to return the forecast for the given city and state.
     const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=temperature_2m_max,temperature_2m_min`;
     fetch(forecastUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            const forecastDiv = document.getElementById('forecast');
-            let forecastHTML = '<h2>Weekly Forecast</h2>';
-            data.daily.temperature_2m_max.forEach((maxTemp, index) => {
-                const minTemp = data.daily.temperature_2m_min[index];
-                forecastHTML += `
-                    <p>Day ${index + 1}: Max: ${maxTemp} °C, Min: ${minTemp} °C</p>
-                `;
-            });
-            forecastDiv.innerHTML = forecastHTML;
+            const forecast = data.daily.temperature_2m_max.map((maxTemp, index) => ({
+                maxTemp,
+                minTemp: data.daily.temperature_2m_min[index]
+            }));
+            document.getElementById('forecast').dataset.forecast = JSON.stringify(forecast);
+            updateForecastDisplay();
         })
         .catch(error => {
             console.error('Error fetching forecast data:', error);
@@ -143,6 +129,7 @@ function fetchForecast(lat, lng) { // Function to return the forecast for the gi
 }
 
 function updateWeatherDisplay(){
+    const lang = isEnglish ? 'en' : 'es';
     const weatherDiv = document.getElementById('weather');
     const temperature = parseFloat(weatherDiv.dataset.temperature);
     const displayTemp = isCelsius ? temperature : (temperature * 9/5) + 32;
@@ -154,6 +141,7 @@ function updateWeatherDisplay(){
 }
 
 function updateForecastDisplay(){
+    const lang = isEnglish ? 'en' : 'es';
     const forecastDiv = document.getElementById('forecast');
     const forecast = JSON.parse(forecastDiv.dataset.forecast || '[]');
     let forecastHTML = `<h2>${translations[lang].weeklyForecast}</h2>`;
@@ -162,7 +150,7 @@ function updateForecastDisplay(){
         const minTemp = isCelsius ? day.minTemp : (day.minTemp * 9/5) + 32;
         const unit = isCelsius ? '°C' : '°F';
         forecastHTML += `
-        <p>${translations[lang].temperature} Day ${index + 1}: Max: ${displayMaxTemp.toFixed(2)} ${unit}, Min: ${displayMinTemp.toFixed(2)} ${unit}</p>
+        <p>${translations[lang].temperature} Day ${index + 1}: Max: ${maxTemp.toFixed(2)} ${unit}, Min: ${minTemp.toFixed(2)} ${unit}</p>
         `;
     });
     forecastDiv.innerHTML = forecastHTML;
@@ -175,5 +163,5 @@ function updatePageLanguage() {
     document.getElementById('getWeather').textContent = translations[lang].getWeather;
     document.getElementById('getForecast').textContent = translations[lang].getForecast;
     document.getElementById('toggleUnits').textContent = translations[lang].toggleUnits;
-    document.getElementById('translatePage').textContent = translations[lang].translatePage;
+    document.getElementById('language').textContent = translations[lang].translatePage;
 }
