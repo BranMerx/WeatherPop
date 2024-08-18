@@ -8,7 +8,7 @@ const translations = {
         getWeater: "Get Weather",
         getForecast: "Get Forecast",
         unitsMeasure: "Change Units of Measurement",
-        language: "EN/ES",
+        language: "English/Spanish",
         currentWeather: "Current Weather",
         getForecast:"Weekly Forecast"
     },
@@ -18,7 +18,7 @@ const translations = {
         getWeather: "Obtener el clima",
         getForecast: "Obtener el pronóstico",
         unitsMeasure: "Cambiar unidades",
-        language:"EN/ES",
+        language:"inglés/Español",
         currentWeather: "Clima actual",
         getForecast:"Pronóstico semenal"
     }
@@ -31,6 +31,9 @@ document.getElementById('getWeather').addEventListener('click', function(){  // 
     const state = document.getElementById('state').value;
     const apiKey = 'b2af4ce301674059b88135b7ea8aa42a';
     const geocodeUrl = `https://api.opencagedata.com/geocode/v1/json?q=${city},${state}&key=${apiKey}`;
+
+        //Add function here to clear the screen from any previous button process? Possible if-else statements
+
 
     fetch(geocodeUrl)
     .then(response => {
@@ -59,6 +62,8 @@ document.getElementById('getForecast').addEventListener('click', function(){ // 
     const apiKey = 'b2af4ce301674059b88135b7ea8aa42a';
     const geocodeUrl = `https://api.opencagedata.com/geocode/v1/json?q=${city},${state}&key=${apiKey}`;
 
+    //Add function here to clear the screen from any previous button process? Possible if-else statements
+
     fetch(geocodeUrl)
     .then(response => {
         if (!response.ok) {
@@ -82,12 +87,15 @@ document.getElementById('getForecast').addEventListener('click', function(){ // 
 
 document.getElementById('unitsMeasure').addEventListener('click', function(){
     isCelsius = !isCelsius;
+    //add possible if else statments for the status of the display options?
     updateWeatherDisplay();
-    updateForecastDisplay();
+    updateForecastDisplay(); 
 });
 
 document.getElementById('language').addEventListener('click',function(){
     isEnglish = !isEnglish;
+    //add possible if else statments for the status of the display options?
+
     updatePageLanguage();
     updateWeatherDisplay();
     updateForecastDisplay();
@@ -158,10 +166,11 @@ function updateForecastDisplay(){
 
 function updatePageLanguage() {
     const lang = isEnglish ? 'en' : 'es';
-    document.getElementById('cityLabel').textContent = translations[lang].city;
-    document.getElementById('stateLabel').textContent = translations[lang].state;
+    //Insert if-else statements for every scenario
+    document.getElementById('city').textContent = translations[lang].city;
+    document.getElementById('state').textContent = translations[lang].state;
     document.getElementById('getWeather').textContent = translations[lang].getWeather;
     document.getElementById('getForecast').textContent = translations[lang].getForecast;
-    document.getElementById('toggleUnits').textContent = translations[lang].toggleUnits;
+    document.getElementById('unitsMeasure').textContent = translations[lang].toggleUnits;
     document.getElementById('language').textContent = translations[lang].translatePage;
 }
