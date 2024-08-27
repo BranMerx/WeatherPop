@@ -3,6 +3,8 @@ let isEnglish = true;
 
 const translations = {
     en: {
+        cityPlaceHolder: "Enter city",
+        statePlaceHolder: "Enter state",
         city: "City:",
         state: "State:",
         getWeater: "Get Weather",
@@ -13,12 +15,14 @@ const translations = {
         getForecast:"Weekly Forecast"
     },
     es: {
+        cityPlaceHolder: "Ingresa Ciudad",
+        statePlaceHolder: "Ingresa Estado",
         city: "Ciudad:",
         state: "Estado:",
         getWeather: "Obtener el clima",
         getForecast: "Obtener el pronóstico",
         unitsMeasure: "Cambiar unidades",
-        language:"inglés/Español",
+        language:"Inglés/Español",
         currentWeather: "Clima actual",
         getForecast:"Pronóstico semenal"
     }
@@ -27,8 +31,8 @@ const translations = {
 
 
 document.getElementById('getWeather').addEventListener('click', function(){  // Event listener when Get Weather button is pushed
-    const city = document.getElementById('city').value;
-    const state = document.getElementById('state').value;
+    const city = document.getElementById('cityLabel').value;
+    const state = document.getElementById('stateLabel').value;
     const apiKey = 'b2af4ce301674059b88135b7ea8aa42a';
     const geocodeUrl = `https://api.opencagedata.com/geocode/v1/json?q=${city},${state}&key=${apiKey}`;
 
@@ -57,8 +61,8 @@ document.getElementById('getWeather').addEventListener('click', function(){  // 
 });
 
 document.getElementById('getForecast').addEventListener('click', function(){ // Event listener when Get Forecast button is pushed
-    const city = document.getElementById('city').value;
-    const state = document.getElementById('state').value;
+    const city = document.getElementById('cityLabel').value;
+    const state = document.getElementById('stateLabel').value;
     const apiKey = 'b2af4ce301674059b88135b7ea8aa42a';
     const geocodeUrl = `https://api.opencagedata.com/geocode/v1/json?q=${city},${state}&key=${apiKey}`;
 
@@ -92,13 +96,14 @@ document.getElementById('unitsMeasure').addEventListener('click', function(){
     updateForecastDisplay(); 
 });
 
-document.getElementById('language').addEventListener('click',function(){
+document.getElementById('language').addEventListener('click', function(){
     isEnglish = !isEnglish;
     //add possible if else statments for the status of the display options?
 
     updatePageLanguage();
-    updateWeatherDisplay();
-    updateForecastDisplay();
+
+    //add if else statements for the different situations
+
 });
 
 function fetchWeather(lat, lng) { // Function to return value for get current weather for the given city and state.
@@ -166,11 +171,14 @@ function updateForecastDisplay(){
 
 function updatePageLanguage() {
     const lang = isEnglish ? 'en' : 'es';
-    //Insert if-else statements for every scenario
-    document.getElementById('city').textContent = translations[lang].city;
-    document.getElementById('state').textContent = translations[lang].state;
+    document.getElementById('cityLabel').textContent = translations[lang].city;
+    document.getElementById('stateLabel').textContent = translations[lang].state;
     document.getElementById('getWeather').textContent = translations[lang].getWeather;
     document.getElementById('getForecast').textContent = translations[lang].getForecast;
-    document.getElementById('unitsMeasure').textContent = translations[lang].toggleUnits;
-    document.getElementById('language').textContent = translations[lang].translatePage;
+    document.getElementById('unitsMeasure').textContent = translations[lang].unitsMeasure;
+    document.getElementById('language').textContent = translations[lang].language;
+
+    //Updating placeholders for city and state input fields
+    document.getElementById('cityLabel').setAttribute('placeholder', translations[lang].cityPlaceHolder);
+    document.getElementById('stateLabel').setAttribute('placeholder', translations[lang].statePlaceHolder);
 }
