@@ -7,7 +7,7 @@ const translations = {
         statePlaceHolder: "Enter state",
         city: "City:",
         state: "State:",
-        getWeater: "Get Weather",
+        getWeather: "Get Weather",
         getForecast: "Get Forecast",
         unitsMeasure: "Change Units of Measurement",
         language: "English/Spanish",
@@ -31,13 +31,12 @@ const translations = {
 
 
 document.getElementById('getWeather').addEventListener('click', function(){  // Event listener when Get Weather button is pushed
+    //Clear any previous results
+    
     const city = document.getElementById('cityLabel').value;
     const state = document.getElementById('stateLabel').value;
     const apiKey = 'b2af4ce301674059b88135b7ea8aa42a';
     const geocodeUrl = `https://api.opencagedata.com/geocode/v1/json?q=${city},${state}&key=${apiKey}`;
-
-        //Add function here to clear the screen from any previous button process? Possible if-else statements
-
 
     fetch(geocodeUrl)
     .then(response => {
@@ -61,12 +60,12 @@ document.getElementById('getWeather').addEventListener('click', function(){  // 
 });
 
 document.getElementById('getForecast').addEventListener('click', function(){ // Event listener when Get Forecast button is pushed
+   //clear previous results
+   
     const city = document.getElementById('cityLabel').value;
     const state = document.getElementById('stateLabel').value;
     const apiKey = 'b2af4ce301674059b88135b7ea8aa42a';
     const geocodeUrl = `https://api.opencagedata.com/geocode/v1/json?q=${city},${state}&key=${apiKey}`;
-
-    //Add function here to clear the screen from any previous button process? Possible if-else statements
 
     fetch(geocodeUrl)
     .then(response => {
@@ -107,6 +106,8 @@ document.getElementById('language').addEventListener('click', function(){
 });
 
 function fetchWeather(lat, lng) { // Function to return value for get current weather for the given city and state.
+    document.getElementById('weather').innerHTML ='';
+
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`;
     fetch(weatherUrl)
     fetch(weatherUrl)
@@ -124,6 +125,7 @@ function fetchWeather(lat, lng) { // Function to return value for get current we
 }
 
 function fetchForecast(lat, lng) { // Function to return the forecast for the given city and state.
+    document.getElementById('forecast').innerHTML = '';
     const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=temperature_2m_max,temperature_2m_min`;
     fetch(forecastUrl)
         .then(response => response.json())
