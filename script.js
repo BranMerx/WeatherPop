@@ -1,6 +1,7 @@
 let isCelsius = true;
 let isEnglish = true;
 
+//Lists of each component that needs to be translated from English to Spanish and vice versa
 const translations = {
     en: {
         cityPlaceHolder: "Enter city",
@@ -88,14 +89,14 @@ document.getElementById('getForecast').addEventListener('click', function(){ // 
     });
 });
 
-document.getElementById('unitsMeasure').addEventListener('click', function(){
+document.getElementById('unitsMeasure').addEventListener('click', function(){ //Function that is used when change units from F to C and vice versa bbutton is pushed. 
     isCelsius = !isCelsius;
     //add possible if else statments for the status of the display options?
     updateWeatherDisplay();
     updateForecastDisplay(); 
 });
 
-document.getElementById('language').addEventListener('click', function(){
+document.getElementById('language').addEventListener('click', function(){ // Function that is used when the translation button is pushed. 
     isEnglish = !isEnglish;
     //add possible if else statments for the status of the display options?
 
@@ -106,13 +107,14 @@ document.getElementById('language').addEventListener('click', function(){
 });
 
 function fetchWeather(lat, lng) { // Function to return value for get current weather for the given city and state.
-    document.getElementById('weather').innerHTML ='';
-
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`;
     fetch(weatherUrl)
     fetch(weatherUrl)
     .then(response => response.json())
     .then(data => {
+        //Maybe add new division for the spanish/English option?
+        document.getElementById('forecast').innerHTML ='';
+        document.getElementById('weather').innerHTML = 'Weather Today: ';
         const weatherDiv = document.getElementById('weather');
         const currentWeather = data.current_weather.temperature;
         weatherDiv.dataset.temperature = currentWeather;
@@ -125,16 +127,19 @@ function fetchWeather(lat, lng) { // Function to return value for get current we
 }
 
 function fetchForecast(lat, lng) { // Function to return the forecast for the given city and state.
-    document.getElementById('forecast').innerHTML = '';
     const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=temperature_2m_max,temperature_2m_min`;
     fetch(forecastUrl)
         .then(response => response.json())
         .then(data => {
+            document.getElementById('weather').innerHTML = '';
+            document.getElementById('forecast').innerHTML ='Forecast for the week:';
+            const forecastDiv = document.getElementById('forecast');//added based upon previous function
             const forecast = data.daily.temperature_2m_max.map((maxTemp, index) => ({
                 maxTemp,
                 minTemp: data.daily.temperature_2m_min[index]
             }));
             document.getElementById('forecast').dataset.forecast = JSON.stringify(forecast);
+            forecastDiv.dataset.temperature = forecast;//added based upon previous function
             updateForecastDisplay();
         })
         .catch(error => {
@@ -143,7 +148,7 @@ function fetchForecast(lat, lng) { // Function to return the forecast for the gi
         });
 }
 
-function updateWeatherDisplay(){
+function updateWeatherDisplay(){ //Will update the actual display based upon what is requseted. 
     const lang = isEnglish ? 'en' : 'es';
     const weatherDiv = document.getElementById('weather');
     const temperature = parseFloat(weatherDiv.dataset.temperature);
@@ -155,7 +160,7 @@ function updateWeatherDisplay(){
     `;
 }
 
-function updateForecastDisplay(){
+function updateForecastDisplay(){ //Updates the forecast display
     const lang = isEnglish ? 'en' : 'es';
     const forecastDiv = document.getElementById('forecast');
     const forecast = JSON.parse(forecastDiv.dataset.forecast || '[]');
@@ -171,7 +176,7 @@ function updateForecastDisplay(){
     forecastDiv.innerHTML = forecastHTML;
 }
 
-function updatePageLanguage() {
+function updatePageLanguage() { //updates the language with what is requested in the actual buttons and text dialogues. 
     const lang = isEnglish ? 'en' : 'es';
     document.getElementById('cityLabel').textContent = translations[lang].city;
     document.getElementById('stateLabel').textContent = translations[lang].state;
