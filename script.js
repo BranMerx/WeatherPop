@@ -60,9 +60,7 @@ document.getElementById('getWeather').addEventListener('click', function(){  // 
     });
 });
 
-document.getElementById('getForecast').addEventListener('click', function(){ // Event listener when Get Forecast button is pushed
-   //clear previous results
-   
+document.getElementById('getForecast').addEventListener('click', function(){ // Event listener when Get Forecast button is pushed   
     const city = document.getElementById('cityLabel').value;
     const state = document.getElementById('stateLabel').value;
     const apiKey = 'b2af4ce301674059b88135b7ea8aa42a';
@@ -91,19 +89,14 @@ document.getElementById('getForecast').addEventListener('click', function(){ // 
 
 document.getElementById('unitsMeasure').addEventListener('click', function(){ //Function that is used when change units from F to C and vice versa bbutton is pushed. 
     isCelsius = !isCelsius;
-    //add possible if else statments for the status of the display options?
+    //If else statement to set up units of measure change and not have both display.
     updateWeatherDisplay();
     updateForecastDisplay(); 
 });
 
 document.getElementById('language').addEventListener('click', function(){ // Function that is used when the translation button is pushed. 
     isEnglish = !isEnglish;
-    //add possible if else statments for the status of the display options?
-
     updatePageLanguage();
-
-    //add if else statements for the different situations
-
 });
 
 function fetchWeather(lat, lng) { // Function to return value for get current weather for the given city and state.
@@ -132,8 +125,8 @@ function fetchForecast(lat, lng) { // Function to return the forecast for the gi
         .then(response => response.json())
         .then(data => {
             document.getElementById('weather').innerHTML = '';
-            document.getElementById('forecast').innerHTML ='Forecast for the week:';
-            const forecastDiv = document.getElementById('forecast');//added based upon previous function
+            document.getElementById('forecast').innerHTML ='Forecast for the Week:';
+            const forecastDiv = document.getElementById('forecast');
             const forecast = data.daily.temperature_2m_max.map((maxTemp, index) => ({
                 maxTemp,
                 minTemp: data.daily.temperature_2m_min[index]
@@ -164,7 +157,7 @@ function updateForecastDisplay(){ //Updates the forecast display
     const lang = isEnglish ? 'en' : 'es';
     const forecastDiv = document.getElementById('forecast');
     const forecast = JSON.parse(forecastDiv.dataset.forecast || '[]');
-    let forecastHTML = `<h2>${translations[lang].weeklyForecast}</h2>`;
+    let forecastHTML = `<h2>${translations[lang].getForecast}</h2>`;
     forecast.forEach((day,index) => {
         const maxTemp = isCelsius ? day.maxTemp : (day.maxTemp * 9/5) + 32;
         const minTemp = isCelsius ? day.minTemp : (day.minTemp * 9/5) + 32;
