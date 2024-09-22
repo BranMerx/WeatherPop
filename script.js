@@ -32,8 +32,7 @@ const translations = {
 
 
 document.getElementById('getWeather').addEventListener('click', function(){  // Event listener when Get Weather button is pushed
-    //Clear any previous results
-    
+   
     const city = document.getElementById('cityLabel').value;
     const state = document.getElementById('stateLabel').value;
     const apiKey = 'b2af4ce301674059b88135b7ea8aa42a';
@@ -105,7 +104,6 @@ function fetchWeather(lat, lng) { // Function to return value for get current we
     fetch(weatherUrl)
     .then(response => response.json())
     .then(data => {
-        //Maybe add new division for the spanish/English option?
         document.getElementById('forecast').innerHTML ='';
         document.getElementById('weather').innerHTML = 'Weather Today: ';
         const weatherDiv = document.getElementById('weather');
@@ -149,7 +147,7 @@ function updateWeatherDisplay(){ //Will update the actual display based upon wha
     const unit = isCelsius ? '°C' : '°F';
     weatherDiv.innerHTML = `
         <h2>${translations[lang].currentWeather}</h2>
-        <p>${translations[lang].temperature}: ${displayTemp.toFixed(2)} ${unit}</p>
+        <p> Today's Temperature: ${displayTemp.toFixed(2)} ${unit}</p>
     `;
 }
 
@@ -163,7 +161,7 @@ function updateForecastDisplay(){ //Updates the forecast display
         const minTemp = isCelsius ? day.minTemp : (day.minTemp * 9/5) + 32;
         const unit = isCelsius ? '°C' : '°F';
         forecastHTML += `
-        <p>${translations[lang].temperature} Day ${index + 1}: Max: ${maxTemp.toFixed(2)} ${unit}, Min: ${minTemp.toFixed(2)} ${unit}</p>
+        <p> Day ${index + 1}: Max: ${maxTemp.toFixed(2)} ${unit}, Min: ${minTemp.toFixed(2)} ${unit}</p>
         `;
     });
     forecastDiv.innerHTML = forecastHTML;
