@@ -88,9 +88,17 @@ document.getElementById('getForecast').addEventListener('click', function(){ // 
 
 document.getElementById('unitsMeasure').addEventListener('click', function(){ //Function that is used when change units from F to C and vice versa bbutton is pushed. 
     isCelsius = !isCelsius;
-    //If else statement to set up units of measure change and not have both display.
-    updateWeatherDisplay();
-    updateForecastDisplay(); 
+
+    const weatherDiv = document.getElementById('weather');
+    const forecastDiv = document.getElementById('forecast');
+
+    if(weatherDiv.dataset.temperature){
+        updateWeatherDisplay();
+    }
+
+    if(forecastDiv.dataset.temperature){
+        updateForecastDisplay();
+    }
 });
 
 document.getElementById('language').addEventListener('click', function(){ // Function that is used when the translation button is pushed. 
