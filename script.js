@@ -93,10 +93,12 @@ document.getElementById('unitsMeasure').addEventListener('click', function(){ //
     const forecastDiv = document.getElementById('forecast');
 
     if(weatherDiv.dataset.temperature){
+        document.getElementById('forecast').innerHTML ='';
         updateWeatherDisplay();
     }
 
     if(forecastDiv.dataset.temperature){
+        document.getElementById('weather').innerHTML = '';
         updateForecastDisplay();
     }
 });
@@ -155,7 +157,7 @@ function updateWeatherDisplay(){ //Will update the actual display based upon wha
     const unit = isCelsius ? '°C' : '°F';
     weatherDiv.innerHTML = `
         <h2>${translations[lang].currentWeather}</h2>
-        <p> Today's Temperature: ${displayTemp.toFixed(2)} ${unit}</p>
+        <p> Today's Temperature/Temperatura de hoy: ${displayTemp.toFixed(2)} ${unit}</p>
     `;
 }
 
@@ -169,7 +171,7 @@ function updateForecastDisplay(){ //Updates the forecast display
         const minTemp = isCelsius ? day.minTemp : (day.minTemp * 9/5) + 32;
         const unit = isCelsius ? '°C' : '°F';
         forecastHTML += `
-        <p> Day ${index + 1}: Max: ${maxTemp.toFixed(2)} ${unit}, Min: ${minTemp.toFixed(2)} ${unit}</p>
+        <p> Day/Día ${index + 1}: Max: ${maxTemp.toFixed(2)} ${unit}, Min: ${minTemp.toFixed(2)} ${unit}</p>
         `;
     });
     forecastDiv.innerHTML = forecastHTML;
@@ -178,6 +180,7 @@ function updateForecastDisplay(){ //Updates the forecast display
 function updatePageLanguage() { //updates the language with what is requested in the actual buttons and text dialogues. 
     document.getElementById('weather').innerHTML = '';
     document.getElementById('forecast').innerHTML ='';
+    
     const lang = isEnglish ? 'en' : 'es';
     document.getElementById('cityLabel').textContent = translations[lang].city;
     document.getElementById('stateLabel').textContent = translations[lang].state;
