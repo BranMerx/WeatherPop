@@ -176,6 +176,8 @@ function updateForecastDisplay(){ //Updates the forecast display
 }
 
 function updatePageLanguage() { //updates the language with what is requested in the actual buttons and text dialogues. 
+    document.getElementById('weather').innerHTML = '';
+    document.getElementById('forecast').innerHTML ='';
     const lang = isEnglish ? 'en' : 'es';
     document.getElementById('cityLabel').textContent = translations[lang].city;
     document.getElementById('stateLabel').textContent = translations[lang].state;
